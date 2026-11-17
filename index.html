@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Career Explorer • My AI Path</title>
+<style>
+:root{
+  --navy:#11224d; --blue:#1976d2; --purple:#8a38c7; --green:#149c67; --gold:#ffbf3f;
+  --bg1:#edf4ff; --bg2:#f8f3ff; --bg3:#eafcf4; --ink:#20304f; --soft:#5b6d90;
+  --card:#ffffff; --border:#dbe4f5;
+}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,var(--bg1),var(--bg2) 54%,var(--bg3));}
+.wrap{max-width:1120px;margin:0 auto;padding:22px 16px 50px}
+.hero{background:linear-gradient(135deg,#11224d,#1d4f93 55%,#6a35b7);color:#fff;border-radius:28px;padding:26px;box-shadow:0 16px 40px rgba(17,34,77,.2)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:center}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
+.eyebrow{display:inline-block;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.14);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.hero h1{margin:10px 0 8px;font-size:clamp(30px,4vw,50px);line-height:1.04}
+.hero p{margin:0;color:#e8eefc;max-width:68ch}
+.sparkles{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.spark{padding:10px 14px;border-radius:16px;background:rgba(255,255,255,.13);font-weight:800;font-size:14px}
+.hero-visual{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:14px}
+.hero-visual img{display:block;width:100%;border-radius:16px}
+.card{margin-top:18px;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:22px;box-shadow:0 8px 24px rgba(25,66,132,.08)}
+.hide{display:none !important}
+.topline{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
+.step-pill{display:inline-block;padding:8px 13px;border-radius:999px;background:#eef3ff;color:#1f4a8b;font-weight:900;font-size:13px}
+.progress{height:14px;background:#e7edf9;border-radius:999px;overflow:hidden;margin-top:14px}
+.bar{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--purple),var(--green));transition:width .25s ease}
+.intro-grid,.track-grid,.results-grid,.question-options{display:grid;gap:12px}
+.intro-grid{grid-template-columns:repeat(3,1fr)}
+.track-grid{grid-template-columns:repeat(3,1fr)}
+.results-grid{grid-template-columns:repeat(3,1fr)}
+.question-options{grid-template-columns:repeat(3,1fr)}
+@media(max-width:840px){.intro-grid,.track-grid,.results-grid,.question-options{grid-template-columns:1fr}}
+.big-choice,.family-card,.track-card,.question-option,.result-card{border:2px solid #d7e2f3;border-radius:20px;background:#fff;transition:.18s ease;cursor:pointer}
+.big-choice:hover,.family-card:hover,.track-card:hover,.question-option:hover{transform:translateY(-2px);box-shadow:0 10px 18px rgba(30,72,141,.09);border-color:#89b3ec}
+.big-choice{padding:18px;min-height:140px;text-align:left}
+.big-choice[aria-pressed="true"],.family-card.selected,.track-card.selected,.question-option.selected{border-color:#1c75d8;box-shadow:0 0 0 3px rgba(28,117,216,.12);background:#f3f8ff}
+.big-choice .emoji{font-size:34px;display:block;margin-bottom:8px}
+.big-choice .title{display:block;font-weight:900;font-size:19px;margin-bottom:6px}
+.big-choice .sub{display:block;color:var(--soft)}
+.note{margin-top:14px;background:#eff7ff;border-left:5px solid var(--blue);border-radius:16px;padding:13px 15px;color:#35507d}
+.input-wrap{margin-top:14px}
+label{display:block;font-weight:800;margin:12px 0 7px}
+input[type=text],textarea{width:100%;padding:13px 14px;border:2px solid #d5e1f5;border-radius:16px;font:inherit;color:var(--ink);background:#fff}
+textarea{min-height:90px;resize:vertical}
+input:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+.btn{border:0;border-radius:16px;padding:13px 18px;font:inherit;font-weight:900;cursor:pointer;background:var(--blue);color:#fff}
+.btn.secondary{background:#edf2fb;color:#22406d}
+.btn.green{background:var(--green)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.family-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.count-badge{padding:9px 14px;border-radius:999px;background:#eef6ff;color:#20508c;font-weight:900}
+.family-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:900px){.family-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.family-grid{grid-template-columns:1fr}}
+.family-card{padding:16px;min-height:150px;position:relative;overflow:hidden}
+.family-card h3{margin:0 0 6px;font-size:19px}
+.family-card p{margin:0 0 10px;color:var(--soft);font-size:14px}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900;color:#fff}
+.badge.tech{background:var(--blue)} .badge.creative{background:var(--purple)} .badge.data{background:var(--green)}
+.family-icon{font-size:28px;margin-bottom:6px}
+.question{padding:16px;border-radius:20px;background:#f7f9ff;border:1px solid #e3eaf7;margin-top:14px}
+.question h3{margin:0 0 10px;font-size:20px}
+.question-option{padding:14px;min-height:110px;text-align:left}
+.question-option .opt-title{font-weight:850;display:block;margin-bottom:10px;font-size:17px}.tiny-label{display:block;color:#64718d;font-size:11px;font-weight:650;letter-spacing:.02em}
+.track-card{padding:18px;color:#fff;border:0;min-height:180px}
+.track-card.tech{background:linear-gradient(135deg,#1f72cf,#154f9a)}
+.track-card.creative{background:linear-gradient(135deg,#9542cf,#6428a8)}
+.track-card.data{background:linear-gradient(135deg,#17a36c,#12784f)}
+.track-card .emoji{font-size:34px}
+.track-card h3{margin:8px 0 6px;font-size:24px}
+.track-card p{margin:0;color:#eff5ff}
+.result-card{padding:18px;color:#fff;border:0;min-height:190px}
+.result-card.tech{background:linear-gradient(135deg,#1f72cf,#154f9a)}
+.result-card.creative{background:linear-gradient(135deg,#9542cf,#6428a8)}
+.result-card.data{background:linear-gradient(135deg,#17a36c,#12784f)}
+.result-card .score{font-size:44px;font-weight:1000;line-height:1;margin:8px 0 4px}
+.result-card .rank{font-size:14px;font-weight:800;opacity:.95}
+.mini-panel{margin-top:18px;background:#f7fbff;border:1px solid #dce7f8;border-radius:20px;padding:18px}
+.listy li{margin:7px 0}
+.privacy{font-size:13px;color:#506486;margin:18px 4px 0}
+.copy-status{margin-top:10px;font-weight:800;color:#226f47}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Grade 7 • Career Discovery + AI + Coding</div>
+        <h1>Discover a career path that feels exciting 🚀</h1>
+        <p>Start with careers you care about. Then find the <strong>coding and AI pathway</strong> that fits the kind of projects you would enjoy building.</p>
+        <div class="sparkles">
+          <div class="spark">🎯 Choose 1–3 career families</div>
+          <div class="spark">🧠 Answer 10 fun questions</div>
+          <div class="spark">✨ Get a pathway suggestion</div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="career-funnel.png" alt="Career families funnel into three learning tracks: Tech and Engineering, Arts and Media, Data and Helping People">
+      </div>
+    </div>
+  </header>
+
+  <section class="card">
+    <div class="topline">
+      <div class="step-pill" id="status">Step 1 of 4</div>
+      <button class="btn secondary" id="topBack" style="display:none" type="button">← Back to previous step</button>
+      <div class="step-pill" id="substatus">No sign-in • No saved data • Browser only</div>
+    </div>
+    <div class="progress" aria-label="Progress"><div class="bar" id="bar"></div></div>
+  </section>
+
+  <section class="card" id="step1">
+    <h2>1. Do you already have a career in mind?</h2>
+    <p>Choose the one that sounds most like you right now. You can always change your mind later.</p>
+    <div class="intro-grid" id="ideaChoices"></div>
+    <div class="input-wrap hide" id="careerIdeaWrap">
+      <label for="careerIdea">What career are you curious about?</label>
+      <input id="careerIdea" type="text" maxlength="90" placeholder="Example: veterinarian, filmmaker, firefighter, architect">
+      <label for="careerWhy">What makes you interested in this career?</label>
+      <textarea id="careerWhy" maxlength="450" placeholder="I like animals and want to help them feel better because..."></textarea>
+      <div class="note hide" id="careerAcknowledgment" aria-live="polite"></div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="continue1" disabled>Continue to Career Families →</button>
+    </div>
+  </section>
+
+  <section class="card hide" id="step2">
+    <div class="family-toolbar">
+      <div>
+        <h2 style="margin:0">2. Pick up to THREE career families</h2>
+        <p style="margin:6px 0 0">These are the 15 career families from your chart. Pick what interests you, then see a quick example of how people in that field can use AI.</p>
+      </div>
+      <div class="count-badge" id="familyCount">0 of 3 selected</div>
+    </div>
+    <div class="family-grid" id="familyGrid"></div>
+    <div class="note" id="familyNote">Choose at least 1 family. You can select up to 3.</div>
+    <div class="mini-panel hide" id="aiExplorer" aria-live="polite"><h3 style="margin-top:0">🤖 How could AI help in these careers?</h3><p>These are examples of what AI might do. AI can make mistakes! Read how a person checks its work, then find out more about a real example for your Career Portfolio.</p><div id="aiExamples"></div></div>
+    <div class="actions">
+      <button class="btn secondary" data-back="1">← Back</button>
+      <button class="btn" id="continue2" disabled>Continue to the pathway quiz →</button>
+    </div>
+  </section>
+
+  <section class="card hide" id="step3">
+    <h2>3. Which kinds of projects sound most fun?</h2>
+    <p>This does <strong>not</strong> choose your future career. It simply suggests which <strong>learning track</strong> might feel best for you this trimester.</p>
+    <div class="note">🎮 <strong>Welcome to Coding!</strong> All three paths teach computer science. One builds useful apps, another codes interactive creations, and the third creates tools that help people make decisions. First, choose what sounds fun. We'll suggest a track at the end.</div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button class="btn secondary" data-back="2">← Back</button>
+      <button class="btn" id="continue3" disabled>See my results →</button>
+    </div>
+  </section>
+
+  <section class="card hide" id="step4">
+    <h2>4. Your Coding pathway suggestions</h2>
+    <p>These results show what kinds of projects you might enjoy most in <strong>Coding</strong>. <strong>You still choose</strong> your final pathway.</p>
+    <div class="results-grid" id="results"></div>
+
+    <div class="mini-panel">
+      <h3 style="margin-top:0">Your selected career families</h3>
+      <p id="careerSummary"></p>
+      <h3>Project ideas connected to your interests</h3>
+      <div id="ideas"></div>
+      <h3>AI ideas to investigate</h3><div id="resultAI"></div>
+    </div>
+
+    <div class="mini-panel">
+      <h3 style="margin-top:0">Choose your pathway</h3>
+      <div class="track-grid" id="chooseTrack"></div>
+      <label for="whyPath">Why did you choose this pathway?</label>
+      <textarea id="whyPath" placeholder="I chose this pathway because..."></textarea>
+    </div>
+
+    <div class="mini-panel">
+      <h3 style="margin-top:0">Next step: Your Google Slides Career Portfolio</h3>
+      <ol class="listy">
+        <li>Download or copy your results below.</li>
+        <li>Open your <strong>Google Slides Career Portfolio</strong> from Google Classroom.</li>
+        <li>Add your three career interests, your career research, your vision board, and your pathway choice.</li>
+        <li>Later, add screenshots of your coding project and reflect on what you learned.</li>
+      </ol>
+    </div>
+
+    <div class="actions">
+      <button class="btn green" id="downloadBtn">⬇ Download my results</button>
+      <button class="btn" id="copyBtn">Copy portfolio starter text</button>
+      <button class="btn secondary" id="printBtn">Print / Save as PDF</button>
+      <button class="btn secondary" data-back="3">← Change answers</button>
+      <button class="btn secondary" id="resetBtn">Start over</button>
+    </div>
+    <div class="copy-status" id="copyStatus"></div>
+  </section>
+
+  <p class="privacy"><strong>Privacy reminder:</strong> This page uses no accounts, cookies, trackers, analytics, database, or outside scripts. It uses built-in examples, not live AI. Student answers remain in the open browser page unless the student chooses to copy, print, or download results. Don't type private personal information.</p>
+</main>
+
+<script>
+'use strict';
+const byId = id => document.getElementById(id);
+const appState = {
+  knows:null,
+  careerIdea:'',
+  careerWhy:'',
+  currentStep:1,
+  families:[],
+  answers:Array(10).fill(null),
+  chosenTrack:0
+};
+
+const trackInfo = [
+  {key:'tech', name:'App Inventors', emoji:'💻', colorClass:'tech', short:'Code a useful app with buttons, logic, and optional AI'},
+  {key:'creative', name:'Game & Digital Creators', emoji:'🎨', colorClass:'creative', short:'Code a game, interactive story, or animation'},
+  {key:'data', name:'Community Problem Solvers', emoji:'🌟', colorClass:'data', short:'Code a recommendation tool that helps people make choices'}
+];
+
+const introChoices = [
+  {id:'yes', emoji:'🌟', title:'Yes! I have a career idea', sub:'I want to start with a job I already care about.'},
+  {id:'maybe', emoji:'🧭', title:'Maybe / I\'m exploring', sub:'I have a few ideas and want help narrowing them down.'},
+  {id:'no', emoji:'✨', title:'Not yet', sub:'I\'m open and I want to discover possibilities.'}
+];
+
+const families = [
+  {name:'Health Science', icon:'🩺', detail:'Nurses, doctors, dental hygienists, veterinarians', tracks:['data','tech']},
+  {name:'Computers & Coding', icon:'💻', detail:'Software developers, cybersecurity, game/app coders', tracks:['tech','creative']},
+  {name:'Arts, Media & Entertainment', icon:'🎬', detail:'Graphic design, animation, video, content creation', tracks:['creative','tech']},
+  {name:'Engineering & Design', icon:'🛠️', detail:'Mechanical, robotics, architectural, CAD design', tracks:['tech','creative']},
+  {name:'Manufacturing', icon:'🏭', detail:'Welding, machining, robotics and production', tracks:['tech','data']},
+  {name:'Education', icon:'🍎', detail:'Teachers, coaches, counselors, educators', tracks:['creative','data']},
+  {name:'Business & Finance', icon:'💼', detail:'Accounting, marketing, banking, entrepreneurship', tracks:['data','tech']},
+  {name:'Building & Construction', icon:'🏗️', detail:'Carpentry, plumbing, construction management', tracks:['tech','data']},
+  {name:'Transportation', icon:'✈️', detail:'Aviation, automotive, transit and mechanics', tracks:['tech','data']},
+  {name:'Electronics & Energy', icon:'⚡', detail:'Electricians, solar, energy systems', tracks:['tech','data']},
+  {name:'Beauty & Fashion', icon:'👗', detail:'Fashion design, styling, cosmetology', tracks:['creative','data']},
+  {name:'Fabrication & Props', icon:'🧰', detail:'Prop making, sculpture, set design, fabrication', tracks:['creative','tech']},
+  {name:'Agriculture & Environment', icon:'🌱', detail:'Hydroponics, farming, parks, wildlife', tracks:['data','tech']},
+  {name:'Hospitality & Recreation', icon:'🍽️', detail:'Cooking, tourism, sports, events', tracks:['creative','data']},
+  {name:'Public Service', icon:'🚒', detail:'Firefighters, police, emergency services', tracks:['data','tech']}
+];
+
+// Teacher-written examples are built into the page; no outside AI API is called.
+// Each example is an illustration: students must verify a real-world use with a source.
+const aiGuide = [
+  ['AI can help a veterinarian look at animal X-rays and notice possible problems.','A veterinarian looks at the X-ray too. They decide if the AI found a real problem or made a mistake.','What would a veterinarian do before treating an animal?'],
+  ['AI can suggest code and help find mistakes in a program.','A programmer runs the code and checks that it works and keeps information safe.','How could you test code suggested by AI?'],
+  ['AI can suggest ideas for videos, drawings, and stories.','The artist checks the ideas, makes their own choices, and makes sure they are allowed to use the pictures or words.','Which parts of a creative project should you decide yourself?'],
+  ['AI can suggest building or robot designs.','An engineer tests the design to make sure it works and will not hurt anyone.','How could an engineer test a design?'],
+  ['AI can notice signs that a factory machine might break soon.','A worker checks the machine to see whether there really is a problem.','What should a worker do if the AI says a machine needs repair?'],
+  ['AI can suggest quiz questions and practice activities for students.','A teacher reads the questions, fixes mistakes, and makes sure they are right for the class.','How would a teacher know if an AI quiz question is good?'],
+  ['AI can help a business guess what products people may want to buy.','A business owner compares the guess with real sales and decides what to do.','What could the owner check before ordering more products?'],
+  ['AI can help spot possible delays in a building project.','A construction manager checks what is happening at the job site before changing the plan.','Why is looking at the real job site important?'],
+  ['AI can suggest travel routes and tell workers when a vehicle may need repairs.','A driver or mechanic checks the road, weather, or vehicle before acting on the suggestion.','What could change after AI suggests a route?'],
+  ['AI can help predict when a school or city will use more electricity.','An energy worker checks the latest readings before making changes.','What other information would the worker need?'],
+  ['AI can suggest outfits or help people imagine new clothing designs.','A designer checks that the ideas work for different people, sizes, and personal styles—not just one type of person.','How could a designer make something more people would enjoy wearing?'],
+  ['AI can suggest designs for movie props or stage decorations.','A prop maker builds a sample and checks that it is safe, strong, and looks right.','Why might a drawing look good but be hard to build?'],
+  ['AI can look at plant pictures and suggest when a crop might need water.','A grower checks the soil and the plants before watering.','What could you check yourself to see if a plant needs water?'],
+  ['AI can suggest meals, trips, or activities based on what someone likes.','A person checks important details, like food allergies, cost, and whether the place is open.','What should someone check before following an AI travel suggestion?'],
+  ['AI can help sort requests for community services or suggest where help may be needed.','A community worker reads the request and checks that people are getting the help they need.','Why should a person make the final decision about helping someone?']
+];
+function renderAIGuide(targetId){
+  const holder = byId(targetId);
+  holder.replaceChildren();
+  for(const index of appState.families){
+    const section=document.createElement('div');
+    section.style.cssText='border-top:1px solid #dce7f8;padding-top:12px;margin-top:12px';
+    const h=document.createElement('h4');h.textContent=families[index].icon+' '+families[index].name;h.style.margin='0 0 5px';
+    const ex=document.createElement('p');ex.textContent='Example: '+aiGuide[index][0];
+    const caution=document.createElement('p');caution.textContent='How a person checks it: '+aiGuide[index][1];
+    const question=document.createElement('p');question.textContent='Think about it: '+aiGuide[index][2];
+    section.append(h,ex,caution,question);holder.appendChild(section);
+  }
+}
+
+const questions = [
+  ['Which project sounds the most fun?', ['Build a helpful app', 'Design an interactive game or story', 'Use data to help people decide']],
+  ['What would you most like to create?', ['A tool that solves a problem', 'A digital experience people want to try', 'A tool that recommends helpful choices']],
+  ['What kind of challenge sounds best?', ['Debugging until something works', 'Making something look and feel exciting', 'Using clues to help someone decide']],
+  ['When you think about AI, what interests you most?', ['Putting AI inside an app or tool', 'Using AI to brainstorm visuals or ideas', 'Helping people by checking if AI suggestions are fair']],
+  ['In class, I would rather...', ['Control buttons, logic, and features', 'Animate, design, and tell a story', 'Help people choose using information']],
+  ['If you explored healthcare, which would be coolest?', ['A patient reminder app', 'An educational health game', 'A tool that helps families choose animal-care resources']],
+  ['When you see a great website, you wonder...', ['How they coded that feature', 'How they designed that experience', 'How it helps visitors choose what they need']],
+  ['Which sounds more satisfying?', ['Making a system work', 'Making something memorable', 'Helping someone solve a real problem']],
+  ['For showcase day, you would rather...', ['Demo a working helper app', 'Show an interactive game or animation', 'Demonstrate a tool that makes recommendations']],
+  ['Which role feels most like you?', ['Builder', 'Creator', 'Problem solver']],
+];
+
+function updateProgress(step){
+  byId('status').textContent = `Step ${step} of 4`;
+  byId('bar').style.width = `${step*25}%`;
+}
+
+function showStep(step){
+  appState.currentStep=step;
+  byId('topBack').style.display=step===1?'none':'inline-block';
+  [1,2,3,4].forEach(n => byId('step'+n).classList.toggle('hide', n!==step));
+  updateProgress(step);
+  window.scrollTo({top:0,behavior:'auto'});
+  if(step===4) renderResults();
+}
+
+function makeIntroChoices(){
+  const holder = byId('ideaChoices');
+  introChoices.forEach(choice => {
+    const btn = document.createElement('button');
+    btn.type='button';
+    btn.className='big-choice';
+    btn.setAttribute('aria-pressed','false');
+    btn.innerHTML = `<span class="emoji">${choice.emoji}</span><span class="title">${choice.title}</span><span class="sub">${choice.sub}</span>`;
+    btn.addEventListener('click',() => {
+      appState.knows = choice.id;
+      [...holder.children].forEach(el=>el.setAttribute('aria-pressed', String(el===btn)));
+      byId('careerIdeaWrap').classList.toggle('hide', choice.id !== 'yes');
+      byId('continue1').disabled = false;
+      if(choice.id === 'yes') {
+        byId('continue1').disabled = true;
+        byId('careerIdea').focus();
+      } else {
+        showStep(2);
+      }
+    });
+    holder.appendChild(btn);
+  });
+}
+
+function updateCareerReason(){
+  if(appState.knows!=='yes')return;
+  const career=byId('careerIdea').value.trim();
+  const reason=byId('careerWhy').value.trim();
+  byId('continue1').disabled=!(career && reason);
+  const box=byId('careerAcknowledgment');
+  if(career && reason){
+    box.classList.remove('hide');
+    box.textContent=`That's a thoughtful reason to explore ${career}! Your interest in it matters. We'll look at several ways you could explore this career through Coding. You can still change your mind.`;
+  }else box.classList.add('hide');
+}
+function makeFamilyCards(){
+  const grid = byId('familyGrid');
+  families.forEach((fam, idx) => {
+    const card = document.createElement('button');
+    card.type='button';
+    card.className='family-card';
+    card.innerHTML = `<div class="family-icon">${fam.icon}</div><h3>${fam.name}</h3><p>${fam.detail}</p><div class="badges">${fam.tracks.map(t=>`<span class="badge ${t}">${trackInfo.find(x=>x.key===t).name.split(' & ')[0]}</span>`).join('')}</div>`;
+    card.addEventListener('click',() => {
+      const pos = appState.families.indexOf(idx);
+      if(pos>=0){ appState.families.splice(pos,1); }
+      else if(appState.families.length<3){ appState.families.push(idx); }
+      updateFamilies();
+    });
+    grid.appendChild(card);
+  });
+}
+
+function updateFamilies(){
+  [...byId('familyGrid').children].forEach((card, idx) => card.classList.toggle('selected', appState.families.includes(idx)));
+  byId('familyCount').textContent = `${appState.families.length} of 3 selected`;
+  byId('continue2').disabled = appState.families.length===0;
+  if(appState.families.length===0) byId('familyNote').textContent = 'Choose at least 1 family. You can select up to 3.';
+  else byId('familyNote').textContent = `Selected: ${appState.families.map(i=>families[i].name).join(' • ')}`;
+  byId('aiExplorer').classList.toggle('hide', appState.families.length===0);
+  if(appState.families.length)renderAIGuide('aiExamples');
+}
+
+function makeQuestions(){
+  const wrap = byId('questions');
+  questions.forEach((q, qi) => {
+    const box = document.createElement('div');
+    box.className='question';
+    box.innerHTML = `<h3>${qi+1}. ${q[0]}</h3>`;
+    const optWrap = document.createElement('div');
+    optWrap.className='question-options';
+    q[1].forEach((opt, oi) => {
+      const btn = document.createElement('button');
+      btn.type='button';
+      btn.className='question-option';
+      btn.innerHTML = `<span class="opt-title">${opt}</span><small class="tiny-label">${trackInfo[oi].emoji} ${trackInfo[oi].name}</small>`;
+      btn.addEventListener('click',()=>{
+        appState.answers[qi] = oi;
+        [...optWrap.children].forEach((child, idx)=>child.classList.toggle('selected', idx===oi));
+        byId('continue3').disabled = appState.answers.some(a=>a===null);
+      });
+      optWrap.appendChild(btn);
+    });
+    box.appendChild(optWrap);
+    wrap.appendChild(box);
+  });
+}
+
+function getScores(){
+  const scores = [0,0,0];
+  appState.answers.forEach(ans => { if(ans!==null) scores[ans] += 1; });
+  return scores;
+}
+
+function rankTracks(){
+  const scores = getScores();
+  return [0,1,2].sort((a,b)=>scores[b]-scores[a] || a-b);
+}
+
+function renderResults(){
+  const scores = getScores();
+  const ranked = rankTracks();
+  const results = byId('results');
+  results.innerHTML='';
+  trackInfo.forEach((track, idx) => {
+    const rankLabel = idx===ranked[0] ? 'Top match' : idx===ranked[1] ? 'Strong option' : 'Also possible';
+    const card = document.createElement('div');
+    card.className = `result-card ${track.colorClass}`;
+    card.innerHTML = `<div style="font-size:30px">${track.emoji}</div><div style="font-size:24px;font-weight:1000">${track.name}</div><div class="score">${scores[idx]}/10</div><div class="rank">${rankLabel}</div><div style="margin-top:10px">${track.short}</div>`;
+    results.appendChild(card);
+  });
+  const typed = byId('careerIdea').value.trim();
+  const chosenFamilies = appState.families.map(i=>families[i].name);
+  byId('careerSummary').textContent = (typed ? `Career idea: ${typed}. Why it interests me: ${byId('careerWhy').value.trim()}. ` : '') + `Career families: ${chosenFamilies.join('; ')}.`;
+
+  const mainFamily = typed || (appState.families.length ? families[appState.families[0]].name.toLowerCase() : 'your chosen careers');
+  renderAIGuide('resultAI');
+  byId('ideas').innerHTML = `
+    <p><strong>${trackInfo[0].name}:</strong> Code a helpful app about ${mainFamily}.</p>
+    <p><strong>${trackInfo[1].name}:</strong> Code a game, animation, or interactive story about ${mainFamily}.</p>
+    <p><strong>${trackInfo[2].name}:</strong> Build a recommendation tool to help someone make decisions related to ${mainFamily}.</p>`;
+
+  const chooser = byId('chooseTrack');
+  chooser.innerHTML='';
+  appState.chosenTrack = ranked[0];
+  trackInfo.forEach((track, idx) => {
+    const card = document.createElement('button');
+    card.type='button';
+    card.className = `track-card ${track.colorClass} ${idx===appState.chosenTrack ? 'selected' : ''}`;
+    card.innerHTML = `<div class="emoji">${track.emoji}</div><h3>${track.name}</h3><p>${track.short}</p>`;
+    card.addEventListener('click',()=>{
+      appState.chosenTrack = idx;
+      [...chooser.children].forEach((c,i)=>c.classList.toggle('selected', i===idx));
+    });
+    chooser.appendChild(card);
+  });
+}
+
+function buildSummary(){
+  const scores = getScores();
+  const typed = byId('careerIdea').value.trim() || 'Still exploring';
+  const fams = appState.families.map(i=>families[i].name).join(', ');
+  const why = byId('whyPath').value.trim() || '[Add why you chose this pathway]';
+  return `MY CAREER + AI PATH — PORTFOLIO STARTER\n\n`+
+    `Career idea: ${typed}\n`+
+    `Why I am interested: ${byId('careerWhy').value.trim() || 'Still exploring'}\n`+
+    `Career families: ${fams}\n\n`+
+    `AI ideas I can investigate (not verified research):\n${appState.families.map(i=>families[i].name+': '+aiGuide[i][0]+' How a person checks it: '+aiGuide[i][1]).join('\n')}\n\n`+
+    `Pathway match scores (activity preference only):\n`+
+    `${trackInfo[0].name}: ${scores[0]}/10\n`+
+    `${trackInfo[1].name}: ${scores[1]}/10\n`+
+    `${trackInfo[2].name}: ${scores[2]}/10\n\n`+
+    `My chosen learning pathway: ${trackInfo[appState.chosenTrack].name}\n`+
+    `Why I chose it: ${why}\n\n`+
+    `My next Slides portfolio steps:\n`+
+    `1. Add my top 3 career interests.\n`+
+    `2. Research one specific career.\n`+
+    `3. Create a vision board.\n`+
+    `4. Research and cite one real use of AI in that career and one limitation.\n`+
+    `5. Pitch a coding project related to that career.\n`+
+    `6. Later add screenshots and reflection.\n`;
+}
+
+byId('continue1').addEventListener('click',()=>{if(!byId('continue1').disabled)showStep(2)});
+byId('topBack').addEventListener('click',()=>{if(appState.currentStep>1)showStep(appState.currentStep-1)});
+byId('careerIdea').addEventListener('input',updateCareerReason);
+byId('careerWhy').addEventListener('input',updateCareerReason);
+byId('continue2').addEventListener('click',()=>showStep(3));
+byId('continue3').addEventListener('click',()=>showStep(4));
+byId('careerIdea').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); byId('careerWhy').focus(); }});
+document.querySelectorAll('[data-back]').forEach(btn=>btn.addEventListener('click',()=>showStep(Number(btn.dataset.back))));
+byId('downloadBtn').addEventListener('click',()=>{
+  const blob = new Blob([buildSummary()],{type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'career-explorer-results.txt'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+});
+byId('copyBtn').addEventListener('click', async ()=>{
+  const text = buildSummary();
+  try{ await navigator.clipboard.writeText(text); byId('copyStatus').textContent='Copied! Paste this into your Google Slides Career Portfolio.'; }
+  catch(err){ const ta = document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); byId('copyStatus').textContent='Copied using fallback method.'; }
+});
+byId('printBtn').addEventListener('click',()=>window.print());
+byId('resetBtn').addEventListener('click',()=>{ if(confirm('Clear all answers and start over?')) location.reload(); });
+
+makeIntroChoices();
+makeFamilyCards();
+makeQuestions();
+updateProgress(1);
+</script>
+</body>
+</html>
